@@ -42,3 +42,55 @@ File.foreach("day_3/input.txt") do |line|
 end
 
 puts priority.sum
+
+# Part 2
+
+class BadgeLetter
+  def initialize(items_from_three_elves)
+    @items_from_three_elves = items_from_three_elves
+  end
+
+  def letter
+    elf_1_items = @items_from_three_elves[0].split("")
+    elf_1_items.each do |letter|
+      if @items_from_three_elves[1].include?(letter) && @items_from_three_elves[2].include?(letter)
+        return letter
+      end
+    end
+  end
+end
+
+class BadgePriority
+  def initialize
+    @priorities = []
+  end
+
+  def calculate_priority(badge_letter)
+    if badge_letter == badge_letter.upcase
+      @priorities << badge_letter.ord - 38
+    else
+      @priorities << badge_letter.ord - 96
+    end
+  end
+
+  def sum
+    @priorities.sum
+  end
+end
+
+counter = 0
+items_from_three_elves = []
+badge_priority = BadgePriority.new
+
+File.foreach("day_3/input.txt") do |line|
+  items_from_three_elves << line
+  counter += 1
+  if counter == 3
+    badge_letter = BadgeLetter.new(items_from_three_elves).letter
+    badge_priority.calculate_priority(badge_letter)
+    counter = 0
+    items_from_three_elves = []
+  end
+end
+
+puts badge_priority.sum

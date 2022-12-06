@@ -27,7 +27,7 @@ class SectionAssignment
     end
   end
 
-  def overlap
+  def complete_overlap
     compare_lengths
 
     @shorter_section.each do |section|
@@ -37,14 +37,37 @@ class SectionAssignment
     end
     return true
   end
+
+  def any_overlap
+    compare_lengths
+
+    @shorter_section.each do |section|
+      if @longer_section.include?(section)
+        return true
+      else
+        next
+      end
+    end
+    return false
+  end
 end
 
 class Solution1
   def answer
     array_of_elf_pairs = Pairs.new(File.readlines("day_4/input.txt")).array_of_elf_pair_arrays
     array_of_elf_pairs.map!{ |pair| SectionAssignment.new(pair[0], pair[1]) }
-    .filter { |section_assignment| section_assignment.overlap }.length
+    .filter { |section_assignment| section_assignment.complete_overlap }.length
   end
 end
 
 puts Solution1.new.answer
+
+class Solution2
+  def answer
+    array_of_elf_pairs = Pairs.new(File.readlines("day_4/input.txt")).array_of_elf_pair_arrays
+    array_of_elf_pairs.map!{ |pair| SectionAssignment.new(pair[0], pair[1]) }
+    .filter { |section_assignment| section_assignment.any_overlap }.length
+  end
+end
+
+puts Solution2.new.answer
